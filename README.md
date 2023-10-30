@@ -3,6 +3,8 @@
 ## Exemplo 1
 a)Com a criação do Trigger o gatilho garante que a coluna "DataPedido"seja automaticamente preenchida com a data e hora atuais toda vez que alguém insere um novo registro na tabela "Pedidos":
 
+
+
 ## Exemplo 2 
 ### APÓS A EXECUÇÃO DO PRIMEIRO CÓDIGO REALIZE O SEGUNDO EXEMPLO;
 
@@ -42,5 +44,50 @@ INSERT INTO Filmes (titulo, minutos) VALUES ("Metropole", 0);
 INSERT INTO Filmes (titulo, minutos) VALUES ("A lista", 120);
 ```
 ![erro1](check_minutos.png)
+
+### Trigger Chk_minutos
+
+```sql
+DELIMITER $
+-- Criação do Trigger que alem de mandar
+CREATE TRIGGER chk_minutos BEFORE INSERT ON Filmes
+FOR EACH ROW
+BEGIN
+    DECLARE custom_message VARCHAR(255);
+
+    IF new.minutos <= 0 THEN
+        -- Atribuir a mensagem de erro personalizada à variável
+        SET custom_message = "O valor em miutos está invalido";
+
+        -- Lançar um Erro com mensagem personalizada e código de erro
+        SIGNAL SQLSTATE '22007' SET MESSAGE_TEXT = custom_message;
+    END IF;
+END$
+-- Restauração do Delimitador Padrão
+DELIMITER ;
+```
+
+![erro2](erro_filme.png)
+
+### Trigger log_deletions
+```sql
+create table Log_deletions (
+id int primary key not null auto_increment,
+titulo varchar(60),
+quando datetime,
+quem varchar(40)
+);
+
+-- **Declaração do gatilho**
+DELIMITER $
+create trigger log_deletions after delete on Filmes
+	for each row 
+    begin
+		-- **Comando SQL**
+		insert into Log_deletions values (null, old.titulo, sysdate(), user());
+	end$
+DELIMITER ;
+```
+![erro3](Trigger_log_deletions.png)
 
 
