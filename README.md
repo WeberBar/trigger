@@ -103,3 +103,6 @@ DELIMITER ;
 ![erro3](Trigger_log_deletions.png)
 
 
+### Código:
+trigger: ![código](trigger_banco.sql
+)
