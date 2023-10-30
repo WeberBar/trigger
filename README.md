@@ -2,8 +2,20 @@
 
 ## Exemplo 1
 a)Com a criação do Trigger o gatilho garante que a coluna "DataPedido"seja automaticamente preenchida com a data e hora atuais toda vez que alguém insere um novo registro na tabela "Pedidos":
+```sql
+DELIMITER $
+CREATE TRIGGER RegistroDataCriacaoPedido
+BEFORE INSERT ON Pedidos
+FOR EACH ROW
+BEGIN
+-- **Comando SQL**
+SET NEW. DataPedido = NOW();
+END;
+$
+DELIMITER ;
 
-
+```
+![exemplo1](exemplo1.png)
 
 ## Exemplo 2 
 ### APÓS A EXECUÇÃO DO PRIMEIRO CÓDIGO REALIZE O SEGUNDO EXEMPLO;
